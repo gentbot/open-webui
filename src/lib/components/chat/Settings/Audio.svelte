@@ -3,6 +3,8 @@
 	import { createEventDispatcher, onMount, getContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import Switch from '$lib/components/common/Switch.svelte';
+	import RangeSlider from '$lib/components/common/RangeSlider.svelte';
+	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	const dispatch = createEventDispatcher();
 
 	const i18n = getContext('i18n');
@@ -14,6 +16,7 @@
 	let speechAutoSend = false;
 	let responseAutoPlayback = false;
 	let nonLocalVoices = false;
+	let speechRate = 1;
 
 	let STTEngine = '';
 
@@ -60,6 +63,7 @@
 		STTEngine = $settings?.audio?.stt?.engine ?? '';
 		voice = $settings?.audio?.tts?.voice ?? $config.audio.tts.voice ?? '';
 		nonLocalVoices = $settings.audio?.tts?.nonLocalVoices ?? false;
+		speechRate = $settings.audio?.speechRate ?? 1;
 
 		if ($config.audio.tts.engine === 'openai') {
 			getOpenAIVoices();
@@ -80,7 +84,8 @@
 				tts: {
 					voice: voice !== '' ? voice : undefined,
 					nonLocalVoices: $config.audio.tts.engine === '' ? nonLocalVoices : undefined
-				}
+				},
+				speechRate
 			}
 		});
 		dispatch('save');
@@ -169,6 +174,17 @@
 								>
 							{/each}
 						</select>
+					</div>
+				</div>
+				<div class="flex items-center justify-between my-1.5">
+					<Tooltip content={$i18n.t('Control TTS audio speed.')}>
+						<div class="text-xs">
+							{$i18n.t('TTS speed value')}
+						</div>
+					</Tooltip>
+
+					<div class="mt-1">
+						<RangeSlider bind:rangeValue={speechRate}/>
 					</div>
 				</div>
 				<div class="flex items-center justify-between my-1.5">

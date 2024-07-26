@@ -90,6 +90,7 @@ class TTSConfigForm(BaseModel):
     ENGINE: str
     MODEL: str
     VOICE: str
+    RATE: int
 
 
 class STTConfigForm(BaseModel):

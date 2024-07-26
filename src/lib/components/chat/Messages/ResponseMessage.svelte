@@ -291,6 +291,7 @@
 
 							console.log(voice);
 
+							const speechRate = $settings?.audio?.speechRate ?? 1;
 							const speak = new SpeechSynthesisUtterance(message.content);
 
 							console.log(speak);
@@ -305,7 +306,7 @@
 							if (voice) {
 								speak.voice = voice;
 							}
-
+							speak.rate = speechRate;
 							speechSynthesis.speak(speak);
 						}
 					}, 100);
